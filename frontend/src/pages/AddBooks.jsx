@@ -3,10 +3,10 @@ import React from 'react';
 function AddBooks() {
   return (
     <div className='bg-dark d-flex justify-content-center align-items-center' style={{ minHeight: "91.5vh", padding: "20px" }}>
-        <div className='container-bg-success p-4'>
+        <div className='container p-4'>
       <div className="mb-3 ">
         <label for="exampleFormControlInput1" className="form-label text-white">Book Name</label>
-        <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Enter Book Name" />
+        <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Enter Book Name" name="bookname" />
       </div>
       <div className="mb-3 ">
         <label for="exampleFormControlInput1" className="form-label text-white">Author</label>
@@ -24,6 +24,7 @@ function AddBooks() {
         <label for="exampleFormControlInput1" className="form-label text-white">Price</label>
         <input type="number" className="form-control" id="exampleFormControlInput1" placeholder="Enter The Price" />
       </div>
+      <button className='btn-btn-success'>Submit</button>
       </div>
     </div>
   );

@@ -27,7 +27,7 @@ router.get("/getBooks",async(req, res)=>{
     }
 } );
 /*get request  by id */
-router.get("/getBook/:id", async(req, res)=>{
+router.get("/getBooks/:id", async(req, res)=>{
     
     const id=req.params.id;
     try {
