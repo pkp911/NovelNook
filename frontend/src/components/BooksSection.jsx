@@ -6,40 +6,40 @@ const cheerio = require("cheerio");
 const BooksSection = ({ data, onDelete }) => {
   const booksArray = data.books;
 
-  const t = "https://openlibrary.org";
-  const url =
-    "https://openlibrary.org/search.json?q=Sherlock+Holmes&fields=key,title,author_name,editions";
+  // const t = "https://openlibrary.org";
+  // const url =
+  //   "https://openlibrary.org/search.json?q=Sherlock+Holmes&fields=key,title,author_name,editions";
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        let data = await fetch(url);
-        // console.log(data)
-        data = await data.json();
-        // console.log(data)
-        data = t.concat(data.docs[0].key);
-        console.log(data);
-        let x = await fetch(data, {
-            method:'get',
-            headers:{
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       let data = await fetch(url);
+  //       // console.log(data)
+  //       data = await data.json();
+  //       // console.log(data)
+  //       data = t.concat(data.docs[0].key);
+  //       console.log(data);
+  //       let x = await fetch(data, {
+  //           method:'get',
+  //           headers:{
                 
-            }
-        });
-        x = await x.text();
-        console.log(data);
-        // console.log(x);
+  //           }
+  //       });
+  //       x = await x.text();
+  //       console.log(data);
+  //       // console.log(x);
 
-        const $ = cheerio.load(x);
-        const imageUrl = $('img[itemprop="image"]')["0"].attribs.src;
-        console.log(imageUrl)
-        return imageUrl;
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        return null;
-      }
-    };
-    getData();
-  }, []);
+  //       const $ = cheerio.load(x);
+  //       const imageUrl = $('img[itemprop="image"]')["0"].attribs.src;
+  //       console.log(imageUrl)
+  //       return imageUrl;
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //       return null;
+  //     }
+  //   };
+  //   getData();
+  // }, []);
 
   return (
     <div className="d-flex justify-content-around align-items-center flex-wrap my-3">
