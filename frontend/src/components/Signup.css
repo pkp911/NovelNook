@@ -3,22 +3,31 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #fafafa;
-}
+     /* background-image: url("https://img.freepik.com/free-vector/social-media-landing-page-template_52683-513.jpg"); */
+  /* background-size:100% 100%; */
+    /* background: url('https://th.bing.com/th/id/OIP.6U9vl_rdsFZjk_mGP2GZEAHaEH?rs=1&pid=ImgDetMain') no-repeat center center fixed; */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: rgba(0, 0, 0, 0.32);
 
+
+}
 .signup-box {
-    background-color: #fff;
-    border: 1px solid #dbdbdb;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
     padding: 40px;
-    width: 350px;
+    width: 300px;
     text-align: center;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
 }
 
 .signup-box h2 {
     margin-bottom: 20px;
     font-family: 'Helvetica Neue', sans-serif;
     font-weight: 300;
-    color: #262626;
+    color: #ffffff;
 }
 
 .signup-box form {

@@ -67,8 +67,8 @@ function Signup({ setIsLoggedIn, setUserId }) {
   };
 
   const toggleForm = () => {
-    setIsLogin(!isLogin); 
-    setData({ name: "", email: "", password: "" }); 
+    setIsLogin(!isLogin); // Toggle between login and signup
+    setData({ name: "", email: "", password: "" }); // Reset form data
   };
 
   return (
