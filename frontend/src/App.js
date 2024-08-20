@@ -20,8 +20,7 @@ function App() {
     const token = localStorage.getItem("authToken");
     const storedUserId = localStorage.getItem("userId");
 
-    // Ensure both token and userId are present
-    if (token || storedUserId) {
+    if (token && storedUserId) {
       setIsLoggedIn(true);
       setUserId(storedUserId);
     }

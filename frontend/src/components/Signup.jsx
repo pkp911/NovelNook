@@ -11,8 +11,9 @@ function Signup({ setIsLoggedIn, setUserId }) {
     email: "",
     password: "",
   });
-  const [isLogin, setIsLogin] = useState(true); 
+  const [isLogin, setIsLogin] = useState(true);
 
+  // Handle input change
   const handleChange = (e) => {
     setData({
       ...data,
@@ -20,6 +21,7 @@ function Signup({ setIsLoggedIn, setUserId }) {
     });
   };
 
+  // Handle form submission for login and signup
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -55,10 +57,13 @@ function Signup({ setIsLoggedIn, setUserId }) {
         toast.success("Signup successful!");
       }
 
-      // Store token and user ID in state
-      localStorage.setItem("authToken", response.data.token); 
+      // Extract user ID from the response and set state
+      const userId = response.data.user._id;
+      localStorage.setItem("authToken", response.data.token); // Save token to localStorage
+      localStorage.setItem("userId", userId); // Save userId to localStorage
+
       setIsLoggedIn(true);
-      setUserId(response.data.userId); 
+      setUserId(userId);
       navigate("/home");
     } catch (error) {
       toast.error(isLogin ? "Login failed!" : "Signup failed!");
@@ -66,15 +71,16 @@ function Signup({ setIsLoggedIn, setUserId }) {
     }
   };
 
+  // Toggle between login and signup forms
   const toggleForm = () => {
-    setIsLogin(!isLogin); // Toggle between login and signup
-    setData({ name: "", email: "", password: "" }); // Reset form data
+    setIsLogin(!isLogin);
+    setData({ name: "", email: "", password: "" });
   };
 
   return (
     <div className="signup-container">
       <div className="signup-box">
-        <h2>{isLogin ? "Login" : "Sign up"}</h2>
+        <h2>{isLogin ? "Login" : "Sign Up"}</h2>
         <form onSubmit={handleSubmit}>
           {!isLogin && (
             <input

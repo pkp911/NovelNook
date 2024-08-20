@@ -1,16 +1,17 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
 const userModel = require("../models/userModel");
+const { isAuthenticated } = require("../models/auth");
 
-// const crypt=
+// Register route
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    console.log("yaha aya");
 
     // Check if the user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
-      return res.status(200).json({ message: "Email already exists" });
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     // Create and save new user
@@ -18,8 +19,7 @@ router.post("/register", async (req, res) => {
     await newUser.save();
 
     // Generate token for the user
-    const token = await newUser.generateToken(); // Assuming this method exists in your userModel
-    console.log("Generated Token:", token); // Print the token
+    const token = newUser.generateToken();
 
     // Set cookie options
     const options = {
@@ -34,7 +34,6 @@ router.post("/register", async (req, res) => {
       token,
     });
   } catch (error) {
-    console.error("Registration Error:", error.message);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -42,31 +41,34 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// Login route
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    //    const data={email, password};
+
+    // Check if user exists
     const user = await userModel.findOne({ email }).select("+password");
-    
-    if (!user) return res.status(200).json({ message: "User Does Not Exist" });
+    if (!user) {
+      return res.status(400).json({ message: "User does not exist" });
+    }
+
+    // Check if password matches
     const isMatch = await user.matchPassword(password);
-    console.log(password, userModel.password);
-    // console.log(password);
-    // console.log(isMatch);
     if (!isMatch) {
       return res.status(400).json({
         success: false,
         message: "Incorrect Password",
       });
     }
-    // console.log(userModel.password);
-   
-    
-    const token = await user.generateToken();
+
+    // Generate token and set cookie
+    const token = user.generateToken();
     const options = {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
       httpOnly: true,
     };
+
+    // Send response with token and user details
     res.status(200).cookie("token", token, options).json({
       success: true,
       user,
@@ -79,52 +81,61 @@ router.post("/login", async (req, res) => {
     });
   }
 });
-router.delete("/delete/:id", async (req, res) => {
+
+// Logout route
+router.get("/logout", (req, res) => {
+  try {
+    res
+      .status(200)
+      .cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      })
+      .json({
+        success: true,
+        message: "Logged out successfully",
+      });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+// Delete user route
+router.delete("/delete/:id", isAuthenticated, async (req, res) => {
   const id = req.params.id;
   try {
-    const user = userModel;
-    const data = await user.findByIdAndDelete(id);
-    if (!data) {
-      return res.status(404).json({ message: "User Does Not exist" });
+    const user = await userModel.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: "User does not exist" });
     }
-    res.status(200).json({ message: "DELETED" });
+    res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
-router.put("/update/:id", async (req, res) => {
+
+// Update user route
+router.put("/update/:id", isAuthenticated, async (req, res) => {
   const id = req.params.id;
   const { email, password } = req.body;
   try {
     const user = await userModel.findById(id);
     if (!user) {
-      return res.status(404).json({ message: "User Does Not exists" });
+      return res.status(404).json({ message: "User does not exist" });
     }
-    await userModel.findByIdAndUpdate(id, password, { new: true });
-    res.status(200).json({ message: "Password Updated" });
 
-    const data = await userModel.findByIdAndUpdate(id, { password: password });
+    if (password) {
+      user.password = await bcrypt.hash(password, 10);
+    }
+
+    await user.save();
+    res.status(200).json({ message: "User updated successfully" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
-router.put("logout", async(req, res)=>{
-   try{
-    res.status(200).cookie("token", null, {expires:new Date(Date.now()), httpOnly:true})
-    .json({
-      success:true,
-      message:"Logged Out",
-    })
-   }
-   catch(error){
-    res.status(500).json({message:error.message,
-
-    });
-   }
-})
-
-//
 
 module.exports = router;

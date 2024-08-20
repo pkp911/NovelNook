@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Search.css";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
+import "./Search.css";
 
 function Search() {
   const [query, setQuery] = useState("");
@@ -12,6 +12,20 @@ function Search() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Retrieve saved search data from local storage
+    const savedQuery = localStorage.getItem("searchQuery");
+    const savedResults = localStorage.getItem("searchResults");
+
+    if (savedQuery) {
+      setQuery(savedQuery);
+    }
+
+    if (savedResults) {
+      setResults(JSON.parse(savedResults));
+    }
+  }, []);
+
   const truncateString = (str, num) => {
     return str && str.length > num ? str.slice(0, num) + "..." : str;
   };
@@ -19,8 +33,9 @@ function Search() {
   const handleSearch = async () => {
     if (!query) return;
 
-    setLoading(true); // Start loading
-    setResults([]); // Clear previous results
+    setLoading(true);
+    setResults([]);
+    localStorage.setItem("searchQuery", query); // Save query to local storage
 
     const url = `https://openlibrary.org/search.json?q=${query}&fields=key,title,author_name,cover_i`;
 
@@ -37,10 +52,11 @@ function Search() {
       setLoadingImages(initialLoadingState);
 
       setResults(filteredResults);
+      localStorage.setItem("searchResults", JSON.stringify(filteredResults)); // Save results to local storage
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
