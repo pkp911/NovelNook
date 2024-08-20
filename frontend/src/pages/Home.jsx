@@ -2,7 +2,14 @@ import React from 'react';
 import './Home.css';
 import bookImage from '../images/pkp.avif'; // Import the image with a proper variable name
 import { Link } from 'react-router-dom';
-
+import '../components/Footer';
+const Footer=()=>{
+    return(
+        <div className='d-flex justify-content-center align-items-center p-3 text-white bg-dark' style={{borderTop:"1px solid white"}}>
+            <h5>Developed By Prashant Pandey</h5>
+        </div>
+    );
+}
 const Home = () => {
     return (
         <div className='Home-Page bg-dark text-white container-fluid d-flex justify-content-center align-items-center'>
@@ -22,7 +29,10 @@ const Home = () => {
                     style={{ height: "91.5vh" }}>
                     <img src={bookImage} alt="Books" style={{ maxWidth: '100%', height: 'auto' }} />
                 </div>
+                <Footer/>
             </div>
+            
+            {/* <footer></footer> */}
         </div>
     );
 };

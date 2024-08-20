@@ -64,6 +64,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn, userId }) => {
                   <Link className="nav-item nav-link active text-white" to="/books">Books</Link>
                   <Link className="nav-item nav-link active text-white" to="/addBooks">Add Books</Link>
                   <Link className="nav-item nav-link active text-white" to="/search">Search</Link>
+                  <Link className="nav-item nav-link active text-white" to="/favourite">Favourite</Link>
                   <button
                     className="nav-item nav-link active text-white"
                     onClick={handleDelete}

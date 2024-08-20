@@ -11,7 +11,7 @@ function Signup({ setIsLoggedIn, setUserId }) {
     email: "",
     password: "",
   });
-  const [isLogin, setIsLogin] = useState(true); // State to toggle between login and signup
+  const [isLogin, setIsLogin] = useState(true); 
 
   const handleChange = (e) => {
     setData({

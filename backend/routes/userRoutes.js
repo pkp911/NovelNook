@@ -5,7 +5,7 @@ const userModel = require("../models/userModel");
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    console.log('yaha aya');
+    console.log("yaha aya");
 
     // Check if the user already exists
     const existingUser = await userModel.findOne({ email });
@@ -46,16 +46,37 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     //    const data={email, password};
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email }).select("+password");
+    
     if (!user) return res.status(200).json({ message: "User Does Not Exist" });
-
-    console.log(user, user.password, password);
-
-    if (user.password !== password)
-      return res.status(200).json({ message: "Wrong Password" });
-    return res.status(200).json({ message: "User Login Successfully" });
+    const isMatch = await user.matchPassword(password);
+    console.log(password, userModel.password);
+    // console.log(password);
+    // console.log(isMatch);
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect Password",
+      });
+    }
+    // console.log(userModel.password);
+   
+    
+    const token = await user.generateToken();
+    const options = {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    };
+    res.status(200).cookie("token", token, options).json({
+      success: true,
+      user,
+      token,
+    });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 });
 router.delete("/delete/:id", async (req, res) => {
@@ -89,6 +110,20 @@ router.put("/update/:id", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+router.put("logout", async(req, res)=>{
+   try{
+    res.status(200).cookie("token", null, {expires:new Date(Date.now()), httpOnly:true})
+    .json({
+      success:true,
+      message:"Logged Out",
+    })
+   }
+   catch(error){
+    res.status(500).json({message:error.message,
+
+    });
+   }
+})
 
 //
 
