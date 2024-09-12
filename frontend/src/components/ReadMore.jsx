@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import "./ReadMore.css"; // Assuming you have a CSS file for styling
-
+import "./ReadMore.css"; 
 function ReadMore() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
