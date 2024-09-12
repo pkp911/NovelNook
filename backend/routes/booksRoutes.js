@@ -21,6 +21,7 @@ router.get("/getBooks",async(req, res)=>{
     let books;
     try {
         books=await bookModel.find();
+        //by bookModel.find() we will populate each one of the book
         res.status(200).json({books});
     } catch (error) {
         console.log(error);

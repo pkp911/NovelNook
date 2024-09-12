@@ -6,13 +6,21 @@ import axios from "axios";
 const Navbar = ({ isLoggedIn, setIsLoggedIn, userId }) => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Clear the token from local storage or cookies
-    localStorage.removeItem("authToken"); // Adjust this line if you're using cookies or a different storage
-    setIsLoggedIn(false); // Update the login state
-    navigate("/"); // Redirect to the Signup page
-    toast.success("Logged out successfully!");
-  };
+  const handleLogout = async () => {
+  try {
+    // Send the request to the backend's logout route
+    await axios.get('http://localhost:1000/api/v1/logout', { withCredentials: true });
+
+    // Clear localStorage (if you're storing any other user data)
+    toast.success("Logged Out Successfully");
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    navigate("/"); 
+
+  } catch (error) {
+    console.error("Logout failed:", error.response ? error.response.data.message : error.message);
+  }
+};
 
   const handleDelete = async () => {
     try {
@@ -64,7 +72,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn, userId }) => {
                   <Link className="nav-item nav-link active text-white" to="/books">Books</Link>
                   <Link className="nav-item nav-link active text-white" to="/addBooks">Add Books</Link>
                   <Link className="nav-item nav-link active text-white" to="/search">Search</Link>
-                  <Link className="nav-item nav-link active text-white" to="/favourite">Favourite</Link>
+                 
                   <button
                     className="nav-item nav-link active text-white"
                     onClick={handleDelete}

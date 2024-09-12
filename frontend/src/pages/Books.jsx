@@ -31,6 +31,13 @@ const Books = () => {
         console.error('Error deleting book:', error);
         toast.error("Failed to delete the book.");
     }
+    const updateBook=async(id)=>{
+      try {
+        
+      } catch (error) {
+        
+      }
+    }
 };
   return (
     <div className='bg-dark' style={{ minHeight: "91.5vh" }}>
